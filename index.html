@@ -94,21 +94,25 @@
             <h1 class="text-base sm:text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
               Suno Lyrics Obfuscator
             </h1>
-            <span class="text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span id="badgeLabel" class="text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
               Unicode Toolkit
             </span>
           </div>
-          <p class="text-xs text-gray-500 hidden sm:block">Explore Unicode transformations while preserving lyric structure</p>
+          <p id="subtitleLabel" class="text-xs text-gray-500 hidden sm:block">Explore Unicode transformations while preserving lyric structure</p>
         </div>
       </div>
 
       <!-- Quick Action Presets -->
       <div class="flex items-center gap-2">
+        <select id="languageSelect" aria-label="Language" class="px-2 py-1.5 rounded-lg text-xs font-medium text-gray-300 bg-gray-800/80 border border-gray-700/60 focus:outline-none focus:ring-1 focus:ring-purple-500">
+          <option value="en">EN</option>
+          <option value="ru">RU</option>
+        </select>
         <button id="btnSample" class="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 bg-gray-800/80 hover:bg-gray-700 hover:text-white border border-gray-700/60 transition-all flex items-center gap-1.5 active:scale-95">
           <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          <span>Load Example</span>
+          <span id="sampleLabel">Load Example</span>
         </button>
       </div>
     </div>
@@ -120,7 +124,7 @@
     <!-- Control Bar / Algorithm Options -->
     <div class="bg-[#0e1424] border border-gray-800 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-between gap-4">
       <div class="flex flex-wrap items-center gap-3">
-        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Method:</label>
+        <label id="methodLabel" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Method:</label>
         
         <div class="inline-flex rounded-xl bg-gray-900/90 p-1 border border-gray-800">
           <button id="mode-zwsp" data-mode="zwsp" class="method-btn active px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-white bg-purple-600 shadow-md">
@@ -139,11 +143,11 @@
       <div class="flex items-center gap-4">
         <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-300 select-none">
           <input type="checkbox" id="preserveTags" checked class="rounded border-gray-700 bg-gray-900 text-purple-600 focus:ring-0 focus:ring-offset-0">
-          <span>Preserve <code class="text-cyan-400 font-mono">[Tags]</code></span>
+          <span id="preserveLabel">Preserve <code class="text-cyan-400 font-mono">[Tags]</code></span>
         </label>
         <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-300 select-none">
           <input type="checkbox" id="inspectMode" class="rounded border-gray-700 bg-gray-900 text-cyan-500 focus:ring-0 focus:ring-offset-0">
-          <span>Inspect Special Characters</span>
+          <span id="inspectLabel">Inspect Special Characters</span>
         </label>
       </div>
     </div>
@@ -157,7 +161,7 @@
         <div class="px-4 py-3 bg-[#0a0f1d] border-b border-gray-800/80 flex items-center justify-between text-xs">
           <div class="flex items-center gap-2 font-mono text-cyan-400 font-medium">
             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            INPUT LYRICS
+            <span id="inputTitle">INPUT LYRICS</span>
           </div>
           <div class="flex items-center gap-3 text-gray-400 font-mono">
             <span id="inCharCount">0 chars</span>
@@ -178,12 +182,12 @@
 
         <!-- Panel Footer -->
         <div class="px-4 py-2.5 bg-[#0a0f1d]/60 border-t border-gray-800/60 flex items-center justify-between text-xs text-gray-500">
-          <span>Standard raw UTF-8 input</span>
+          <span id="inputFooterLabel">Standard raw UTF-8 input</span>
           <button id="btnClearInput" class="hover:text-red-400 text-gray-500 transition-colors flex items-center gap-1">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Clear
+            <span id="clearLabel">Clear</span>
           </button>
         </div>
       </div>
@@ -194,7 +198,7 @@
         <div class="px-4 py-3 bg-[#0a0f1d] border-b border-gray-800/80 flex items-center justify-between text-xs">
           <div class="flex items-center gap-2 font-mono text-emerald-400 font-medium">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            TRANSFORMED OUTPUT
+            <span id="outputTitle">TRANSFORMED OUTPUT</span>
           </div>
           <div class="flex items-center gap-3 text-gray-400 font-mono">
             <span id="outCharCount">0 chars</span>
@@ -225,7 +229,7 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            Review before use
+            <span id="reviewLabel">Review before use</span>
           </span>
           <span class="text-gray-500 font-mono" id="statusPill">Ready</span>
         </div>
@@ -243,7 +247,7 @@
         <svg class="w-5 h-5 text-cyan-200 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
-        <span>Process Lyrics</span>
+        <span id="processLabel">Process Lyrics</span>
       </button>
 
       <!-- Copy to Clipboard Button -->
@@ -254,7 +258,7 @@
         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
         </svg>
-        <span>Copy Output</span>
+        <span id="copyLabel">Copy Output</span>
       </button>
     </div>
 
@@ -263,9 +267,9 @@
       <div class="p-4 rounded-xl bg-[#0a0f1d] border border-gray-800/80 flex flex-col gap-1.5">
         <div class="flex items-center gap-2 text-cyan-400 font-semibold text-xs uppercase tracking-wider">
           <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-          1. Zero-Width Spaces
+          <span id="tip1Title">1. Zero-Width Spaces</span>
         </div>
-        <p class="text-xs text-gray-400 leading-relaxed">
+        <p id="tip1Body" class="text-xs text-gray-400 leading-relaxed">
           Inserts Unicode points (<code class="text-gray-300">\u200B</code>, <code class="text-gray-300">\u200C</code>, <code class="text-gray-300">\u200D</code>) that are usually invisible but remain part of the string.
         </p>
       </div>
@@ -273,9 +277,9 @@
       <div class="p-4 rounded-xl bg-[#0a0f1d] border border-gray-800/80 flex flex-col gap-1.5">
         <div class="flex items-center gap-2 text-purple-400 font-semibold text-xs uppercase tracking-wider">
           <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
-          2. Preserved Tags
+          <span id="tip2Title">2. Preserved Tags</span>
         </div>
-        <p class="text-xs text-gray-400 leading-relaxed">
+        <p id="tip2Body" class="text-xs text-gray-400 leading-relaxed">
           Standalone headers like <code class="text-gray-300">[Verse 1]</code> and <code class="text-gray-300">[Chorus]</code> can remain unchanged to preserve document structure.
         </p>
       </div>
@@ -283,9 +287,9 @@
       <div class="p-4 rounded-xl bg-[#0a0f1d] border border-gray-800/80 flex flex-col gap-1.5">
         <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          3. Compatibility
+          <span id="tip3Title">3. Compatibility</span>
         </div>
-        <p class="text-xs text-gray-400 leading-relaxed">
+        <p id="tip3Body" class="text-xs text-gray-400 leading-relaxed">
           Unicode handling varies. A platform may normalize, reject, remove, pronounce, or visibly render special characters, so always test the result.
         </p>
       </div>
@@ -320,8 +324,129 @@
     const statusPill = document.getElementById('statusPill');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
+    const languageSelect = document.getElementById('languageSelect');
 
     let currentMode = 'zwsp';
+    let currentLanguage = 'en';
+
+    const translations = {
+      en: {
+        badgeLabel: 'Unicode Toolkit',
+        subtitleLabel: 'Explore Unicode transformations while preserving lyric structure',
+        sampleLabel: 'Load Example',
+        methodLabel: 'Method:',
+        modeZwsp: 'Zero-Width Steganography (Recommended)',
+        modeSoft: 'Soft-Hyphen Injection',
+        modeHomoglyph: 'Homoglyph (Cyrillic swap)',
+        preserveLabel: 'Preserve <code class="text-cyan-400 font-mono">[Tags]</code>',
+        inspectLabel: 'Inspect Special Characters',
+        inputTitle: 'INPUT LYRICS',
+        inputPlaceholder: 'Paste your lyrics here (e.g. [Verse 1])...',
+        inputFooterLabel: 'Standard raw UTF-8 input',
+        clearLabel: 'Clear',
+        outputTitle: 'TRANSFORMED OUTPUT',
+        outputPlaceholder: 'Transformed text will appear here...',
+        reviewLabel: 'Review before use',
+        ready: 'Ready',
+        processed: 'Processed ✓',
+        processLabel: 'Process Lyrics',
+        copyLabel: 'Copy Output',
+        tip1Title: '1. Zero-Width Spaces',
+        tip1Body: 'Inserts Unicode points (<code class="text-gray-300">\\u200B</code>, <code class="text-gray-300">\\u200C</code>, <code class="text-gray-300">\\u200D</code>) that are usually invisible but remain part of the string.',
+        tip2Title: '2. Preserved Tags',
+        tip2Body: 'Standalone headers like <code class="text-gray-300">[Verse 1]</code> and <code class="text-gray-300">[Chorus]</code> can remain unchanged to preserve document structure.',
+        tip3Title: '3. Compatibility',
+        tip3Body: 'Unicode handling varies. A platform may normalize, reject, remove, pronounce, or visibly render special characters, so always test the result.',
+        chars: '{n} chars',
+        words: '{n} words',
+        extraBytes: '+{percent}% ({n} extra UTF-8 bytes)',
+        overhead: '+0% overhead',
+        nothingToCopy: 'Nothing to copy!',
+        copied: 'Copied transformed text to clipboard!',
+        copyFailed: 'Failed to copy. Please copy manually.',
+        processedToast: 'Text transformed successfully!',
+        sampleLoaded: 'Loaded sample lyrics!'
+      },
+      ru: {
+        badgeLabel: 'Unicode-инструменты',
+        subtitleLabel: 'Unicode-преобразования с сохранением структуры текста',
+        sampleLabel: 'Загрузить пример',
+        methodLabel: 'Метод:',
+        modeZwsp: 'Невидимые символы (рекомендуется)',
+        modeSoft: 'Мягкий перенос',
+        modeHomoglyph: 'Омоглифы (кириллица)',
+        preserveLabel: 'Сохранять <code class="text-cyan-400 font-mono">[теги]</code>',
+        inspectLabel: 'Показать специальные символы',
+        inputTitle: 'ИСХОДНЫЙ ТЕКСТ',
+        inputPlaceholder: 'Вставьте текст песни, например [Куплет 1]...',
+        inputFooterLabel: 'Исходный текст UTF-8',
+        clearLabel: 'Очистить',
+        outputTitle: 'ПРЕОБРАЗОВАННЫЙ ТЕКСТ',
+        outputPlaceholder: 'Здесь появится преобразованный текст...',
+        reviewLabel: 'Проверьте перед использованием',
+        ready: 'Готово',
+        processed: 'Обработано ✓',
+        processLabel: 'Преобразовать текст',
+        copyLabel: 'Копировать',
+        tip1Title: '1. Невидимые символы',
+        tip1Body: 'Вставляет символы Unicode (<code class="text-gray-300">\\u200B</code>, <code class="text-gray-300">\\u200C</code>, <code class="text-gray-300">\\u200D</code>). Обычно они невидимы, но остаются частью строки.',
+        tip2Title: '2. Сохранение тегов',
+        tip2Body: 'Отдельные заголовки вроде <code class="text-gray-300">[Куплет 1]</code> и <code class="text-gray-300">[Припев]</code> можно оставить без изменений, сохранив структуру текста.',
+        tip3Title: '3. Совместимость',
+        tip3Body: 'Платформы обрабатывают Unicode по-разному: символы могут быть удалены, заменены, озвучены или показаны. Всегда проверяйте результат.',
+        chars: '{n} симв.',
+        words: '{n} слов',
+        extraBytes: '+{percent}% ({n} доп. байт UTF-8)',
+        overhead: '+0% размера',
+        nothingToCopy: 'Нечего копировать!',
+        copied: 'Преобразованный текст скопирован!',
+        copyFailed: 'Не удалось скопировать. Скопируйте текст вручную.',
+        processedToast: 'Текст успешно преобразован!',
+        sampleLoaded: 'Пример загружен!'
+      }
+    };
+
+    function t(key, values = {}) {
+      const template = translations[currentLanguage][key] || translations.en[key] || key;
+      return Object.entries(values).reduce(
+        (text, [name, value]) => text.replaceAll('{' + name + '}', value),
+        template
+      );
+    }
+
+    function applyLanguage(language) {
+      currentLanguage = translations[language] ? language : 'en';
+      document.documentElement.lang = currentLanguage;
+      languageSelect.value = currentLanguage;
+
+      const textKeys = [
+        'badgeLabel', 'subtitleLabel', 'sampleLabel', 'methodLabel',
+        'inspectLabel', 'inputTitle', 'inputFooterLabel', 'clearLabel',
+        'outputTitle', 'reviewLabel', 'processLabel', 'copyLabel',
+        'tip1Title', 'tip2Title', 'tip3Title'
+      ];
+      textKeys.forEach(key => {
+        document.getElementById(key).textContent = t(key);
+      });
+
+      document.getElementById('mode-zwsp').textContent = t('modeZwsp');
+      document.getElementById('mode-soft').textContent = t('modeSoft');
+      document.getElementById('mode-homoglyph').textContent = t('modeHomoglyph');
+      document.getElementById('preserveLabel').innerHTML = t('preserveLabel');
+      document.getElementById('tip1Body').innerHTML = t('tip1Body');
+      document.getElementById('tip2Body').innerHTML = t('tip2Body');
+      document.getElementById('tip3Body').innerHTML = t('tip3Body');
+      inputLyrics.placeholder = t('inputPlaceholder');
+      outputLyrics.placeholder = t('outputPlaceholder');
+      statusPill.textContent = t('ready');
+
+      try {
+        localStorage.setItem('suno-obfuscator-language', currentLanguage);
+      } catch {
+        // Language persistence is optional.
+      }
+      updateStats();
+    }
 
     // Original sample text created for this demo
     const SAMPLE_LYRICS = `[Verse 1]
@@ -445,9 +570,9 @@ Make the words entirely new`;
       const inWords = inText.trim() ? inText.trim().split(/\s+/).length : 0;
       const outChars = outText.length;
 
-      inCharCount.textContent = `${inChars} chars`;
-      inWordCount.textContent = `${inWords} words`;
-      outCharCount.textContent = `${outChars} chars`;
+      inCharCount.textContent = t('chars', { n: inChars });
+      inWordCount.textContent = t('words', { n: inWords });
+      outCharCount.textContent = t('chars', { n: outChars });
 
       if (inChars > 0 && outChars >= inChars) {
         const encoder = new TextEncoder();
@@ -455,9 +580,9 @@ Make the words entirely new`;
         const outBytes = encoder.encode(outText).length;
         const diff = outBytes - inBytes;
         const percent = Math.round((diff / inBytes) * 100);
-        expansionRatio.textContent = `+${percent}% (${diff} extra UTF-8 bytes)`;
+        expansionRatio.textContent = t('extraBytes', { percent, n: diff });
       } else {
-        expansionRatio.textContent = '+0% overhead';
+        expansionRatio.textContent = t('overhead');
       }
     }
 
@@ -473,8 +598,8 @@ Make the words entirely new`;
       }
 
       updateStats();
-      statusPill.textContent = 'Processed ✓';
-      setTimeout(() => { statusPill.textContent = 'Ready'; }, 1500);
+      statusPill.textContent = t('processed');
+      setTimeout(() => { statusPill.textContent = t('ready'); }, 1500);
     }
 
     function showToast(message) {
@@ -490,14 +615,14 @@ Make the words entirely new`;
     function copyToClipboard() {
       const text = outputLyrics.value;
       if (!text) {
-        showToast('Nothing to copy!');
+        showToast(t('nothingToCopy'));
         return;
       }
 
       // Robust clipboard copy with fallback
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
-          showToast('Copied obfuscated lyrics to clipboard!');
+          showToast(t('copied'));
         }).catch(() => {
           fallbackCopy(text);
         });
@@ -510,15 +635,15 @@ Make the words entirely new`;
       outputLyrics.select();
       try {
         document.execCommand('copy');
-        showToast('Copied obfuscated lyrics to clipboard!');
+        showToast(t('copied'));
       } catch (err) {
-        showToast('Failed to copy. Please copy manually.');
+        showToast(t('copyFailed'));
       }
     }
 
     btnProcess.addEventListener('click', () => {
       processLyrics();
-      showToast('Lyrics obfuscated successfully!');
+      showToast(t('processedToast'));
     });
 
     btnCopy.addEventListener('click', copyToClipboard);
@@ -533,7 +658,7 @@ Make the words entirely new`;
     btnSample.addEventListener('click', () => {
       inputLyrics.value = SAMPLE_LYRICS;
       processLyrics();
-      showToast('Loaded sample lyrics!');
+      showToast(t('sampleLoaded'));
     });
 
     inputLyrics.addEventListener('input', () => {
@@ -553,8 +678,21 @@ Make the words entirely new`;
       }
     });
 
+    languageSelect.addEventListener('change', (e) => {
+      applyLanguage(e.target.value);
+      processLyrics();
+    });
+
     // Auto-load sample on startup
     window.addEventListener('DOMContentLoaded', () => {
+      let savedLanguage = '';
+      try {
+        savedLanguage = localStorage.getItem('suno-obfuscator-language') || '';
+      } catch {
+        // Fall back to the browser language when storage is unavailable.
+      }
+      const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en';
+      applyLanguage(savedLanguage || browserLanguage);
       inputLyrics.value = SAMPLE_LYRICS;
       processLyrics();
     });
