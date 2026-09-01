@@ -61,6 +61,9 @@
           <button id="mode-zwsp" data-mode="zwsp" class="method-btn active px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-white bg-purple-600 shadow-md">
             Zero-Width Steganography (Recommended)
           </button>
+          <button id="mode-wordjoiner" data-mode="wordjoiner" class="method-btn px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-gray-400 hover:text-gray-200">
+            Word Joiner (U+2060)
+          </button>
           <button id="mode-soft" data-mode="soft" class="method-btn px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-gray-400 hover:text-gray-200">
             Soft-Hyphen Injection
           </button>
@@ -311,6 +314,7 @@
         sampleLabel: 'Load Example',
         methodLabel: 'Method:',
         modeZwsp: 'Zero-Width Steganography (Recommended)',
+        modeWordJoiner: 'Word Joiner (U+2060)',
         modeSoft: 'Soft-Hyphen Injection',
         modeCombined: 'Combined (Aggressive)',
         modeHomoglyph: 'Homoglyph (Cyrillic swap)',
@@ -318,6 +322,7 @@
         inspectLabel: 'Inspect Special Characters',
         compatibilityLabel: 'Compatibility:',
         compatZwsp: 'Usually invisible; broad text compatibility.',
+        compatWordJoiner: 'Invisible and prevents line breaks between adjacent characters.',
         compatSoft: 'May appear as a hyphen when text wraps.',
         compatCombined: 'Maximum overhead; combines zero-width characters with soft hyphens.',
         compatHomoglyph: 'May affect pronunciation, search, and accessibility.',
@@ -360,6 +365,7 @@
         sampleLabel: 'Загрузить пример',
         methodLabel: 'Метод:',
         modeZwsp: 'Невидимые символы (рекомендуется)',
+        modeWordJoiner: 'Word Joiner (U+2060)',
         modeSoft: 'Мягкий перенос',
         modeCombined: 'Комбинированный (агрессивный)',
         modeHomoglyph: 'Омоглифы (кириллица)',
@@ -367,6 +373,7 @@
         inspectLabel: 'Показать специальные символы',
         compatibilityLabel: 'Совместимость:',
         compatZwsp: 'Обычно невидимы; широкая совместимость с текстом.',
+        compatWordJoiner: 'Невидимый символ, запрещающий перенос между соседними буквами.',
         compatSoft: 'Может отображаться как дефис при переносе строки.',
         compatCombined: 'Максимальное увеличение размера: невидимые символы вместе с мягкими переносами.',
         compatHomoglyph: 'Может влиять на произношение, поиск и доступность.',
@@ -430,6 +437,7 @@
       });
 
       document.getElementById('mode-zwsp').textContent = t('modeZwsp');
+      document.getElementById('mode-wordjoiner').textContent = t('modeWordJoiner');
       document.getElementById('mode-soft').textContent = t('modeSoft');
       document.getElementById('mode-combined').textContent = t('modeCombined');
       document.getElementById('mode-homoglyph').textContent = t('modeHomoglyph');
@@ -453,13 +461,14 @@
     function updateCompatibility() {
       const settings = {
         zwsp: { key: 'compatZwsp', color: 'bg-emerald-400' },
+        wordjoiner: { key: 'compatWordJoiner', color: 'bg-cyan-400' },
         soft: { key: 'compatSoft', color: 'bg-amber-400' },
         combined: { key: 'compatCombined', color: 'bg-red-400' },
         homoglyph: { key: 'compatHomoglyph', color: 'bg-purple-400' }
       };
       const setting = settings[currentMode];
       compatibilityText.textContent = t(setting.key);
-      compatibilityDot.classList.remove('bg-emerald-400', 'bg-amber-400', 'bg-red-400', 'bg-purple-400');
+      compatibilityDot.classList.remove('bg-emerald-400', 'bg-cyan-400', 'bg-amber-400', 'bg-red-400', 'bg-purple-400');
       compatibilityDot.classList.add(setting.color);
     }
 
@@ -497,7 +506,8 @@ Make the words entirely new`;
     // Zero-width characters
     const ZW_CHARS = ['\u200B', '\u200C', '\u200D'];
     const SOFT_HYPHEN = '\u00AD';
-    const SPECIAL_CHARS_PATTERN = /[\u200B\u200C\u200D\u00AD]/g;
+    const WORD_JOINER = '\u2060';
+    const SPECIAL_CHARS_PATTERN = /[\u200B\u200C\u200D\u00AD\u2060]/g;
     const GRAPHEME_SEGMENTER = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
       ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
       : null;
@@ -531,6 +541,8 @@ Make the words entirely new`;
           }
           return char;
         }).join('');
+      } else if (mode === 'wordjoiner') {
+        return letters.join(WORD_JOINER);
       } else if (mode === 'soft') {
         return letters.map((char, index) => {
           if (index < letters.length - 1 && index % 2 === 0) {
@@ -583,6 +595,8 @@ Make the words entirely new`;
           html += '<span class="char-marker">[ZWJ]</span>';
         } else if (char === '\u00AD') {
           html += '<span class="char-marker">[SHY]</span>';
+        } else if (char === '\u2060') {
+          html += '<span class="char-marker">[WJ]</span>';
         } else if (char === '\n') {
           html += '<br>';
         } else if (char === ' ') {

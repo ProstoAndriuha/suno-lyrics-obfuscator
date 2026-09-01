@@ -12,7 +12,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 ## Features
 
 - English and Russian interface.
-- Zero-width, soft-hyphen, combined aggressive, and Cyrillic homoglyph modes.
+- Zero-width, Word Joiner, soft-hyphen, combined aggressive, and Cyrillic homoglyph modes.
 - Optional preservation of standalone tags such as `[Verse]`, `[Chorus]`, and `(Hook)`.
 - Live character and UTF-8 overhead counters.
 - Inspector for otherwise invisible special characters.
@@ -37,6 +37,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 ## How it works
 
 - **Zero-width:** inserts `U+200B`, `U+200C`, and `U+200D`.
+- **Word Joiner:** inserts invisible `U+2060` between graphemes.
 - **Soft hyphen:** inserts `U+00AD` at alternating positions.
 - **Combined:** inserts both a rotating zero-width character and `U+00AD` between graphemes.
 - **Homoglyph:** replaces selected Latin letters with visually similar Cyrillic letters.
