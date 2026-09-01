@@ -36,7 +36,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 - **Soft hyphen:** inserts `U+00AD` at alternating positions.
 - **Homoglyph:** replaces selected Latin letters with visually similar Cyrillic letters.
 
-The app currently transforms ASCII letters, digits, and apostrophes. Standalone lines matching `[...]` or `(...)` can remain unchanged.
+Zero-width and soft-hyphen modes support letters from any Unicode script, including Cyrillic. Homoglyph mode replaces only its supported Latin characters. Standalone lines matching `[...]` or `(...)` can remain unchanged.
 
 ## Privacy
 

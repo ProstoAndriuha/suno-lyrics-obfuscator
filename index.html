@@ -481,6 +481,9 @@ Make the words entirely new`;
     // Zero-width characters
     const ZW_CHARS = ['\u200B', '\u200C', '\u200D'];
     const SOFT_HYPHEN = '\u00AD';
+    const GRAPHEME_SEGMENTER = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
+      ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+      : null;
 
     // Cyrillic homoglyphs mapping
     const HOMOGLYPHS = {
@@ -492,11 +495,18 @@ Make the words entirely new`;
       'P': 'Р', 'T': 'Т', 'X': 'Х', 'Y': 'У'
     };
 
+    function splitTextUnits(word) {
+      if (GRAPHEME_SEGMENTER) {
+        return Array.from(GRAPHEME_SEGMENTER.segment(word), part => part.segment);
+      }
+      return Array.from(word);
+    }
+
     function obfuscateWord(word, mode) {
-      if (word.length <= 1) return word;
+      const letters = splitTextUnits(word);
+      if (letters.length <= 1) return word;
 
       if (mode === 'zwsp') {
-        const letters = word.split('');
         return letters.map((char, index) => {
           if (index < letters.length - 1) {
             const zw = ZW_CHARS[index % ZW_CHARS.length];
@@ -505,7 +515,6 @@ Make the words entirely new`;
           return char;
         }).join('');
       } else if (mode === 'soft') {
-        const letters = word.split('');
         return letters.map((char, index) => {
           if (index < letters.length - 1 && index % 2 === 0) {
             return char + SOFT_HYPHEN;
@@ -513,7 +522,7 @@ Make the words entirely new`;
           return char;
         }).join('');
       } else if (mode === 'homoglyph') {
-        return word.split('').map(char => HOMOGLYPHS[char] || char).join('');
+        return letters.map(char => HOMOGLYPHS[char] || char).join('');
       }
       return word;
     }
@@ -529,8 +538,8 @@ Make the words entirely new`;
           return line;
         }
 
-        // Process only alphabetic word tokens
-        return line.replace(/[a-zA-Z0-9']+/g, match => obfuscateWord(match, mode));
+        // Process words from any Unicode script, plus combining marks, numbers, and apostrophes.
+        return line.replace(/[\p{L}\p{M}\p{N}']+/gu, match => obfuscateWord(match, mode));
       });
 
       return processedLines.join('\n');
