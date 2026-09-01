@@ -17,7 +17,11 @@ A small browser tool for experimenting with Unicode transformations while preser
 - Live character and UTF-8 overhead counters.
 - Inspector for otherwise invisible special characters.
 - One-click clipboard copy.
+- Removal of zero-width and soft-hyphen characters.
+- Downloads for transformed and cleaned `.txt` files.
+- Mode-specific compatibility guidance.
 - Text transformation runs locally in the browser.
+- Local CSS and fonts allow the app to work offline after download.
 
 ## Use
 
@@ -40,7 +44,7 @@ Zero-width and soft-hyphen modes support letters from any Unicode script, includ
 
 ## Privacy
 
-Entered text is processed locally and is not sent to an application backend. The page loads Tailwind CSS and Google Fonts from public CDNs, so those providers may still receive ordinary network requests.
+Entered text is processed locally and is not sent to an application backend. Runtime CSS and fonts are bundled with the project, so the app makes no external network requests.
 
 ## Responsible use
 

@@ -6,76 +6,7 @@
   <title>Suno Lyrics Obfuscator — Unicode Text Transformer</title>
   <meta name="description" content="A client-side Unicode text transformer with zero-width, soft-hyphen, and homoglyph modes.">
   
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Tailwind Configuration -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
-          },
-          colors: {
-            brand: {
-              purple: '#7c3aed',
-              neon: '#06b6d4',
-              emerald: '#10b981',
-              dark: '#0b0f19',
-              darker: '#06090e',
-              panel: '#111827',
-              border: '#1f2937'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Custom Styles for Scrollbars and Visual Elements -->
-  <style>
-    /* Custom dark scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b0f19;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #374151;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #4b5563;
-    }
-
-    /* Pulsing glow animation */
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
-    }
-    .animate-glow {
-      animation: pulse-glow 3s infinite ease-in-out;
-    }
-
-    /* Invisible character badge highlight */
-    .char-marker {
-      background: rgba(239, 68, 68, 0.25);
-      color: #f87171;
-      border-radius: 2px;
-      padding: 0 1px;
-      font-size: 0.75em;
-    }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body class="bg-[#06090e] text-gray-100 font-sans min-h-screen flex flex-col justify-between selection:bg-purple-600 selection:text-white">
@@ -149,6 +80,12 @@
           <input type="checkbox" id="inspectMode" class="rounded border-gray-700 bg-gray-900 text-cyan-500 focus:ring-0 focus:ring-offset-0">
           <span id="inspectLabel">Inspect Special Characters</span>
         </label>
+      </div>
+
+      <div class="w-full flex items-center gap-2 rounded-xl border border-gray-800 bg-gray-900/60 px-3 py-2 text-xs text-gray-400">
+        <span id="compatibilityDot" class="w-2 h-2 shrink-0 rounded-full bg-emerald-400"></span>
+        <strong id="compatibilityLabel" class="text-gray-300">Compatibility:</strong>
+        <span id="compatibilityText">Usually invisible; broad text compatibility.</span>
       </div>
     </div>
 
@@ -238,7 +175,7 @@
     </div>
 
     <!-- Action Trigger Center -->
-    <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+    <div class="flex flex-col sm:flex-row flex-wrap items-center gap-3 pt-2">
       <!-- Main Process Button -->
       <button
         id="btnProcess"
@@ -259,6 +196,36 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
         </svg>
         <span id="copyLabel">Copy Output</span>
+      </button>
+
+      <button
+        id="btnClean"
+        class="w-full sm:w-auto py-4 px-6 rounded-xl bg-[#11192e] hover:bg-[#1a2542] text-white border border-gray-700/80 font-bold text-sm tracking-wide uppercase shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+      >
+        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 10v6m4-6v6" />
+        </svg>
+        <span id="cleanLabel">Remove Special Characters</span>
+      </button>
+
+      <button
+        id="btnDownload"
+        class="w-full sm:w-auto py-4 px-6 rounded-xl bg-[#11192e] hover:bg-[#1a2542] text-white border border-gray-700/80 font-bold text-sm tracking-wide uppercase shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+      >
+        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />
+        </svg>
+        <span id="downloadLabel">Download .txt</span>
+      </button>
+
+      <button
+        id="btnDownloadClean"
+        class="w-full sm:w-auto py-4 px-6 rounded-xl bg-[#11192e] hover:bg-[#1a2542] text-white border border-gray-700/80 font-bold text-sm tracking-wide uppercase shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+      >
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />
+        </svg>
+        <span id="downloadCleanLabel">Download Clean .txt</span>
       </button>
     </div>
 
@@ -313,6 +280,9 @@
     const inspectorView = document.getElementById('inspectorView');
     const btnProcess = document.getElementById('btnProcess');
     const btnCopy = document.getElementById('btnCopy');
+    const btnClean = document.getElementById('btnClean');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnDownloadClean = document.getElementById('btnDownloadClean');
     const btnClearInput = document.getElementById('btnClearInput');
     const btnSample = document.getElementById('btnSample');
     const preserveTagsCheckbox = document.getElementById('preserveTags');
@@ -325,6 +295,8 @@
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     const languageSelect = document.getElementById('languageSelect');
+    const compatibilityDot = document.getElementById('compatibilityDot');
+    const compatibilityText = document.getElementById('compatibilityText');
 
     let currentMode = 'zwsp';
     let currentLanguage = 'en';
@@ -340,6 +312,10 @@
         modeHomoglyph: 'Homoglyph (Cyrillic swap)',
         preserveLabel: 'Preserve <code class="text-cyan-400 font-mono">[Tags]</code>',
         inspectLabel: 'Inspect Special Characters',
+        compatibilityLabel: 'Compatibility:',
+        compatZwsp: 'Usually invisible; broad text compatibility.',
+        compatSoft: 'May appear as a hyphen when text wraps.',
+        compatHomoglyph: 'May affect pronunciation, search, and accessibility.',
         inputTitle: 'INPUT LYRICS',
         inputPlaceholder: 'Paste your lyrics here (e.g. [Verse 1])...',
         inputFooterLabel: 'Standard raw UTF-8 input',
@@ -351,6 +327,9 @@
         processed: 'Processed ✓',
         processLabel: 'Process Lyrics',
         copyLabel: 'Copy Output',
+        cleanLabel: 'Remove Special Characters',
+        downloadLabel: 'Download .txt',
+        downloadCleanLabel: 'Download Clean .txt',
         tip1Title: '1. Zero-Width Spaces',
         tip1Body: 'Inserts Unicode points (<code class="text-gray-300">\\u200B</code>, <code class="text-gray-300">\\u200C</code>, <code class="text-gray-300">\\u200D</code>) that are usually invisible but remain part of the string.',
         tip2Title: '2. Preserved Tags',
@@ -365,7 +344,10 @@
         copied: 'Copied transformed text to clipboard!',
         copyFailed: 'Failed to copy. Please copy manually.',
         processedToast: 'Text transformed successfully!',
-        sampleLoaded: 'Loaded sample lyrics!'
+        sampleLoaded: 'Loaded sample lyrics!',
+        cleanedToast: 'Special characters removed!',
+        downloadedToast: 'Text file downloaded!',
+        nothingToDownload: 'Nothing to download!'
       },
       ru: {
         badgeLabel: 'Unicode-инструменты',
@@ -377,6 +359,10 @@
         modeHomoglyph: 'Омоглифы (кириллица)',
         preserveLabel: 'Сохранять <code class="text-cyan-400 font-mono">[теги]</code>',
         inspectLabel: 'Показать специальные символы',
+        compatibilityLabel: 'Совместимость:',
+        compatZwsp: 'Обычно невидимы; широкая совместимость с текстом.',
+        compatSoft: 'Может отображаться как дефис при переносе строки.',
+        compatHomoglyph: 'Может влиять на произношение, поиск и доступность.',
         inputTitle: 'ИСХОДНЫЙ ТЕКСТ',
         inputPlaceholder: 'Вставьте текст песни, например [Куплет 1]...',
         inputFooterLabel: 'Исходный текст UTF-8',
@@ -388,6 +374,9 @@
         processed: 'Обработано ✓',
         processLabel: 'Преобразовать текст',
         copyLabel: 'Копировать',
+        cleanLabel: 'Удалить спецсимволы',
+        downloadLabel: 'Скачать .txt',
+        downloadCleanLabel: 'Скачать чистый .txt',
         tip1Title: '1. Невидимые символы',
         tip1Body: 'Вставляет символы Unicode (<code class="text-gray-300">\\u200B</code>, <code class="text-gray-300">\\u200C</code>, <code class="text-gray-300">\\u200D</code>). Обычно они невидимы, но остаются частью строки.',
         tip2Title: '2. Сохранение тегов',
@@ -402,7 +391,10 @@
         copied: 'Преобразованный текст скопирован!',
         copyFailed: 'Не удалось скопировать. Скопируйте текст вручную.',
         processedToast: 'Текст успешно преобразован!',
-        sampleLoaded: 'Пример загружен!'
+        sampleLoaded: 'Пример загружен!',
+        cleanedToast: 'Специальные символы удалены!',
+        downloadedToast: 'Текстовый файл скачан!',
+        nothingToDownload: 'Нечего скачивать!'
       }
     };
 
@@ -421,8 +413,9 @@
 
       const textKeys = [
         'badgeLabel', 'subtitleLabel', 'sampleLabel', 'methodLabel',
-        'inspectLabel', 'inputTitle', 'inputFooterLabel', 'clearLabel',
-        'outputTitle', 'reviewLabel', 'processLabel', 'copyLabel',
+        'inspectLabel', 'compatibilityLabel', 'inputTitle', 'inputFooterLabel', 'clearLabel',
+        'outputTitle', 'reviewLabel', 'processLabel', 'copyLabel', 'cleanLabel',
+        'downloadLabel', 'downloadCleanLabel',
         'tip1Title', 'tip2Title', 'tip3Title'
       ];
       textKeys.forEach(key => {
@@ -439,6 +432,7 @@
       inputLyrics.placeholder = t('inputPlaceholder');
       outputLyrics.placeholder = t('outputPlaceholder');
       statusPill.textContent = t('ready');
+      updateCompatibility();
 
       try {
         localStorage.setItem('suno-obfuscator-language', currentLanguage);
@@ -446,6 +440,18 @@
         // Language persistence is optional.
       }
       updateStats();
+    }
+
+    function updateCompatibility() {
+      const settings = {
+        zwsp: { key: 'compatZwsp', color: 'bg-emerald-400' },
+        soft: { key: 'compatSoft', color: 'bg-amber-400' },
+        homoglyph: { key: 'compatHomoglyph', color: 'bg-purple-400' }
+      };
+      const setting = settings[currentMode];
+      compatibilityText.textContent = t(setting.key);
+      compatibilityDot.classList.remove('bg-emerald-400', 'bg-amber-400', 'bg-purple-400');
+      compatibilityDot.classList.add(setting.color);
     }
 
     // Original sample text created for this demo
@@ -474,6 +480,7 @@ Make the words entirely new`;
         btn.classList.add('active', 'bg-purple-600', 'text-white', 'shadow-md');
         btn.classList.remove('text-gray-400');
         currentMode = btn.dataset.mode;
+        updateCompatibility();
         processLyrics();
       });
     });
@@ -481,6 +488,7 @@ Make the words entirely new`;
     // Zero-width characters
     const ZW_CHARS = ['\u200B', '\u200C', '\u200D'];
     const SOFT_HYPHEN = '\u00AD';
+    const SPECIAL_CHARS_PATTERN = /[\u200B\u200C\u200D\u00AD]/g;
     const GRAPHEME_SEGMENTER = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function'
       ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
       : null;
@@ -650,12 +658,55 @@ Make the words entirely new`;
       }
     }
 
+    function cleanSpecialCharacters(text) {
+      return text.replace(SPECIAL_CHARS_PATTERN, '');
+    }
+
+    function downloadText(text, filename) {
+      if (!text) {
+        showToast(t('nothingToDownload'));
+        return;
+      }
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast(t('downloadedToast'));
+    }
+
     btnProcess.addEventListener('click', () => {
       processLyrics();
       showToast(t('processedToast'));
     });
 
     btnCopy.addEventListener('click', copyToClipboard);
+
+    btnClean.addEventListener('click', () => {
+      if (!outputLyrics.value) {
+        showToast(t('nothingToCopy'));
+        return;
+      }
+      outputLyrics.value = cleanSpecialCharacters(outputLyrics.value);
+      if (inspectModeCheckbox.checked) {
+        inspectorView.innerHTML = renderInspectorHTML(outputLyrics.value);
+      }
+      updateStats();
+      showToast(t('cleanedToast'));
+    });
+
+    btnDownload.addEventListener('click', () => {
+      downloadText(outputLyrics.value, 'transformed-lyrics.txt');
+    });
+
+    btnDownloadClean.addEventListener('click', () => {
+      downloadText(cleanSpecialCharacters(outputLyrics.value), 'cleaned-lyrics.txt');
+    });
 
     btnClearInput.addEventListener('click', () => {
       inputLyrics.value = '';
