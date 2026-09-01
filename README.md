@@ -12,7 +12,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 ## Features
 
 - English and Russian interface.
-- Zero-width, soft-hyphen, and Cyrillic homoglyph modes.
+- Zero-width, soft-hyphen, combined aggressive, and Cyrillic homoglyph modes.
 - Optional preservation of standalone tags such as `[Verse]`, `[Chorus]`, and `(Hook)`.
 - Live character and UTF-8 overhead counters.
 - Inspector for otherwise invisible special characters.
@@ -38,6 +38,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 
 - **Zero-width:** inserts `U+200B`, `U+200C`, and `U+200D`.
 - **Soft hyphen:** inserts `U+00AD` at alternating positions.
+- **Combined:** inserts both a rotating zero-width character and `U+00AD` between graphemes.
 - **Homoglyph:** replaces selected Latin letters with visually similar Cyrillic letters.
 
 Zero-width and soft-hyphen modes support letters from any Unicode script, including Cyrillic. Homoglyph mode replaces only its supported Latin characters. Standalone lines matching `[...]` or `(...)` can remain unchanged.

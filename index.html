@@ -57,12 +57,15 @@
       <div class="flex flex-wrap items-center gap-3">
         <label id="methodLabel" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Method:</label>
         
-        <div class="inline-flex rounded-xl bg-gray-900/90 p-1 border border-gray-800">
+        <div class="inline-flex flex-wrap rounded-xl bg-gray-900/90 p-1 border border-gray-800">
           <button id="mode-zwsp" data-mode="zwsp" class="method-btn active px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-white bg-purple-600 shadow-md">
             Zero-Width Steganography (Recommended)
           </button>
           <button id="mode-soft" data-mode="soft" class="method-btn px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-gray-400 hover:text-gray-200">
             Soft-Hyphen Injection
+          </button>
+          <button id="mode-combined" data-mode="combined" class="method-btn px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-gray-400 hover:text-gray-200">
+            Combined (Aggressive)
           </button>
           <button id="mode-homoglyph" data-mode="homoglyph" class="method-btn px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-gray-400 hover:text-gray-200">
             Homoglyph (Cyrillic swap)
@@ -309,12 +312,14 @@
         methodLabel: 'Method:',
         modeZwsp: 'Zero-Width Steganography (Recommended)',
         modeSoft: 'Soft-Hyphen Injection',
+        modeCombined: 'Combined (Aggressive)',
         modeHomoglyph: 'Homoglyph (Cyrillic swap)',
         preserveLabel: 'Preserve <code class="text-cyan-400 font-mono">[Tags]</code>',
         inspectLabel: 'Inspect Special Characters',
         compatibilityLabel: 'Compatibility:',
         compatZwsp: 'Usually invisible; broad text compatibility.',
         compatSoft: 'May appear as a hyphen when text wraps.',
+        compatCombined: 'Maximum overhead; combines zero-width characters with soft hyphens.',
         compatHomoglyph: 'May affect pronunciation, search, and accessibility.',
         inputTitle: 'INPUT LYRICS',
         inputPlaceholder: 'Paste your lyrics here (e.g. [Verse 1])...',
@@ -356,12 +361,14 @@
         methodLabel: 'Метод:',
         modeZwsp: 'Невидимые символы (рекомендуется)',
         modeSoft: 'Мягкий перенос',
+        modeCombined: 'Комбинированный (агрессивный)',
         modeHomoglyph: 'Омоглифы (кириллица)',
         preserveLabel: 'Сохранять <code class="text-cyan-400 font-mono">[теги]</code>',
         inspectLabel: 'Показать специальные символы',
         compatibilityLabel: 'Совместимость:',
         compatZwsp: 'Обычно невидимы; широкая совместимость с текстом.',
         compatSoft: 'Может отображаться как дефис при переносе строки.',
+        compatCombined: 'Максимальное увеличение размера: невидимые символы вместе с мягкими переносами.',
         compatHomoglyph: 'Может влиять на произношение, поиск и доступность.',
         inputTitle: 'ИСХОДНЫЙ ТЕКСТ',
         inputPlaceholder: 'Вставьте текст песни, например [Куплет 1]...',
@@ -424,6 +431,7 @@
 
       document.getElementById('mode-zwsp').textContent = t('modeZwsp');
       document.getElementById('mode-soft').textContent = t('modeSoft');
+      document.getElementById('mode-combined').textContent = t('modeCombined');
       document.getElementById('mode-homoglyph').textContent = t('modeHomoglyph');
       document.getElementById('preserveLabel').innerHTML = t('preserveLabel');
       document.getElementById('tip1Body').innerHTML = t('tip1Body');
@@ -446,11 +454,12 @@
       const settings = {
         zwsp: { key: 'compatZwsp', color: 'bg-emerald-400' },
         soft: { key: 'compatSoft', color: 'bg-amber-400' },
+        combined: { key: 'compatCombined', color: 'bg-red-400' },
         homoglyph: { key: 'compatHomoglyph', color: 'bg-purple-400' }
       };
       const setting = settings[currentMode];
       compatibilityText.textContent = t(setting.key);
-      compatibilityDot.classList.remove('bg-emerald-400', 'bg-amber-400', 'bg-purple-400');
+      compatibilityDot.classList.remove('bg-emerald-400', 'bg-amber-400', 'bg-red-400', 'bg-purple-400');
       compatibilityDot.classList.add(setting.color);
     }
 
@@ -526,6 +535,14 @@ Make the words entirely new`;
         return letters.map((char, index) => {
           if (index < letters.length - 1 && index % 2 === 0) {
             return char + SOFT_HYPHEN;
+          }
+          return char;
+        }).join('');
+      } else if (mode === 'combined') {
+        return letters.map((char, index) => {
+          if (index < letters.length - 1) {
+            const zw = ZW_CHARS[index % ZW_CHARS.length];
+            return char + zw + SOFT_HYPHEN;
           }
           return char;
         }).join('');
