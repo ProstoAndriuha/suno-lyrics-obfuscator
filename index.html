@@ -142,6 +142,7 @@
           <div class="flex items-center gap-2 font-mono text-emerald-400 font-medium">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span id="outputTitle">TRANSFORMED OUTPUT</span>
+            <span id="outputModePill" class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400">ZW</span>
           </div>
           <div class="flex items-center gap-3 text-gray-400 font-mono">
             <span id="outCharCount">0 chars</span>
@@ -472,6 +473,37 @@
       compatibilityDot.classList.add(setting.color);
     }
 
+    function setMode(mode, shouldProcess = true) {
+      const button = document.querySelector(`.method-btn[data-mode="${mode}"]`);
+      if (!button) return;
+
+      document.querySelectorAll('.method-btn').forEach(item => {
+        item.classList.remove('active', 'bg-purple-600', 'text-white', 'shadow-md');
+        item.classList.add('text-gray-400');
+      });
+      button.classList.add('active', 'bg-purple-600', 'text-white', 'shadow-md');
+      button.classList.remove('text-gray-400');
+      currentMode = mode;
+
+      const modeCodes = {
+        zwsp: 'ZW',
+        wordjoiner: 'WJ',
+        soft: 'SHY',
+        combined: 'ZW+SHY',
+        homoglyph: 'HOMO'
+      };
+      document.getElementById('outputModePill').textContent = modeCodes[currentMode];
+      updateCompatibility();
+
+      try {
+        localStorage.setItem('suno-obfuscator-mode', currentMode);
+      } catch {
+        // Mode persistence is optional.
+      }
+
+      if (shouldProcess) processLyrics();
+    }
+
     // Original sample text created for this demo
     const SAMPLE_LYRICS = `[Verse 1]
 City lights are fading into blue
@@ -490,17 +522,7 @@ Write a song about tomorrow
 Make the words entirely new`;
 
     document.querySelectorAll('.method-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.method-btn').forEach(b => {
-          b.classList.remove('active', 'bg-purple-600', 'text-white', 'shadow-md');
-          b.classList.add('text-gray-400');
-        });
-        btn.classList.add('active', 'bg-purple-600', 'text-white', 'shadow-md');
-        btn.classList.remove('text-gray-400');
-        currentMode = btn.dataset.mode;
-        updateCompatibility();
-        processLyrics();
-      });
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
     });
 
     // Zero-width characters
@@ -641,9 +663,8 @@ Make the words entirely new`;
       const processed = obfuscateText(input, currentMode, preserveTags);
       outputLyrics.value = processed;
 
-      if (inspectModeCheckbox.checked) {
-        inspectorView.innerHTML = renderInspectorHTML(processed);
-      }
+      // Keep the inspector synchronized even while its panel is hidden.
+      inspectorView.innerHTML = renderInspectorHTML(processed);
 
       updateStats();
       statusPill.textContent = t('processed');
@@ -777,15 +798,22 @@ Make the words entirely new`;
     // Auto-load sample on startup
     window.addEventListener('DOMContentLoaded', () => {
       let savedLanguage = '';
+      let savedMode = '';
       try {
         savedLanguage = localStorage.getItem('suno-obfuscator-language') || '';
+        savedMode = localStorage.getItem('suno-obfuscator-mode') || '';
       } catch {
         // Fall back to the browser language when storage is unavailable.
       }
       const browserLanguage = navigator.language && navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en';
       applyLanguage(savedLanguage || browserLanguage);
       inputLyrics.value = SAMPLE_LYRICS;
-      processLyrics();
+      setMode(savedMode || 'zwsp');
+    });
+
+    window.addEventListener('pageshow', () => {
+      // Reconcile restored browser state with the actual output after cache/back navigation.
+      setMode(currentMode);
     });
   </script>
 </body>
