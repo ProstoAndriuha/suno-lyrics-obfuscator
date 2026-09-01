@@ -657,8 +657,15 @@ Make the words entirely new`;
     }
 
     function processLyrics() {
-      const input = inputLyrics.value;
+      const rawInput = inputLyrics.value;
+      const input = cleanSpecialCharacters(rawInput);
       const preserveTags = preserveTagsCheckbox.checked;
+
+      // Prevent previously transformed text from blocking a different mode.
+      // Hidden markers split words into one-character tokens, so normalize first.
+      if (input !== rawInput) {
+        inputLyrics.value = input;
+      }
 
       const processed = obfuscateText(input, currentMode, preserveTags);
       outputLyrics.value = processed;

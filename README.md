@@ -18,6 +18,7 @@ A small browser tool for experimenting with Unicode transformations while preser
 - Inspector for otherwise invisible special characters.
 - One-click clipboard copy.
 - Removal of zero-width and soft-hyphen characters.
+- Automatic removal of old hidden markers before applying a different mode.
 - Downloads for transformed and cleaned `.txt` files.
 - Mode-specific compatibility guidance.
 - Text transformation runs locally in the browser.
